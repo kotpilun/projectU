@@ -1,11 +1,5 @@
-import { Counter } from "../../components/Counter";
-
 function MainPage() {
-  return (
-    <div>
-      <Counter />
-    </div>
-  );
+  return <div>Main Page</div>;
 }
 
 export default MainPage;
