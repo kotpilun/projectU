@@ -10,5 +10,9 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "skipLibCheck": true
+  },
+  "baseUrl": ".",
+  "paths": {
+    "*": ["./src/*"]
   }
 }
