@@ -1,14 +1,14 @@
 export function classNames(
   cls: string,
-  mods: Record<string, boolean | string>,
-  additional: string[]
+  mods: Record<string, boolean | string> = {},
+  additional: string[] = []
 ): string {
   const resultClasses = [
     cls,
     ...Object.entries(mods)
       .filter(([, value]) => Boolean(value))
       .map(([cls]) => cls),
-    ...additional,
+    ...additional.filter(Boolean),
   ].join(" ");
 
   return resultClasses;
