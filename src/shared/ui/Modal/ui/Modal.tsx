@@ -1,6 +1,7 @@
 import { classNames } from "@/shared/lib/classNames/classNames";
 import styles from "./Modal.module.scss";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { Portal } from "../../Portal/Portal";
 
 interface ModalProps {
   className?: string;
@@ -11,6 +12,7 @@ interface ModalProps {
 
 export function Modal({ className, children, isOpen, onClose }: ModalProps) {
   const [isClosing, setIsClosing] = useState(false);
+  const modalContainerRef = useRef<HTMLElement | null>(null);
 
   const mods: Record<string, boolean> = {
     [styles.opened]: isOpen ?? false,
@@ -36,13 +38,13 @@ export function Modal({ className, children, isOpen, onClose }: ModalProps) {
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (onClose) {
-          closeHandler();
-        }
+        closeHandler();
       }
     },
-    [closeHandler, onClose]
+    [closeHandler]
   );
+
+  modalContainerRef.current = document.querySelector(".app") as HTMLElement;
 
   useEffect(() => {
     if (isOpen) {
@@ -57,12 +59,16 @@ export function Modal({ className, children, isOpen, onClose }: ModalProps) {
   }, [isOpen, onKeyDown]);
 
   return (
-    <div className={classNames(styles.Modal, mods, [className ?? ""])}>
-      <div className={styles.overlay} onClick={closeHandler}>
-        <div className={styles.content} onClick={onContentClick}>
-          {children}
+    modalContainerRef.current && (
+      <Portal element={modalContainerRef.current}>
+        <div className={classNames(styles.Modal, mods, [className ?? ""])}>
+          <div className={styles.overlay} onClick={closeHandler}>
+            <div className={styles.content} onClick={onContentClick}>
+              {children}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </Portal>
+    )
   );
 }
